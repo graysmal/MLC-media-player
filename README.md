@@ -1,7 +1,8 @@
-Multi-Lane-Client Media Player
+# Multi-Lane-Client Media Player
 
 
 # ABOUT
+Francis Tuttle Computer Science Academy Senior Year Futures Project.
 Created for a class as a free-reign side-assignment as a Senior graduating from Francis Tuttle Technology Center.  
 The purpose of this application is to "mimick" VLC media player in all aspects except playback and metadata.  
  
