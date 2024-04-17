@@ -136,10 +136,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\gs1044940\Desktop\libraries\wxWidgets-3.2.4\include;C:\Users\gs1044940\Desktop\libraries\wxWidgets-3.2.4\include\msvc</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\gs1044940\Desktop\libraries\wxWidgets-3.2.4\include;C:\Users\gs1044940\Desktop\libraries\wxWidgets-3.2.4\include\msvc</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\gs1044940\Desktop\libraries\wxWidgets-3.2.4\include;C:\Users\gs1044940\Desktop\libraries\wxWidgets-3.2.4\include\msvc</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\gs1044940\Desktop\libraries\wxWidgets-3.2.4\include;C:\Users\gs1044940\Desktop\libraries\wxWidgets-3.2.4\include\msvc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

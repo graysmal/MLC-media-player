@@ -1,12 +1,30 @@
 #include <wx/wx.h>
 #include <iostream>
 
+
 class App : public wxApp {
 public:
-    bool OnInit() {
-        wxFrame* window = new wxFrame(NULL, wxID_ANY, "MLC media player", wxDefaultPosition, wxSize(1280, 720));
+    virtual bool OnInit();
+
+
+    static void printHelloWorld() {
+        std::cout << "Hello World!";
+    }
+
+
+};
+
+class MyFrame : public wxFrame {
+public:
+
+    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size) : wxFrame(nullptr, wxID_ANY, title, pos, size){
+        //AllocConsole();
+        ////freopen("conin$", "r", stdin);
+        //freopen("conout$", "w", stdout);
+        //freopen("conout$", "w", stdout);
+        //printHelloWorld();
         wxBoxSizer* app_sizer = new wxBoxSizer(wxVERTICAL);
-        
+
         // MENU BAR
         wxMenuBar* menu_bar = new wxMenuBar(wxHORIZONTAL);
 
@@ -20,7 +38,7 @@ public:
         edit_menu->Append(wxID_ANY, "preferences");
         menu_bar->Append(edit_menu, "edit");
 
-        wxPanel* preview_panel = new wxPanel(window, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+        wxPanel* preview_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
         preview_panel->SetMinSize(wxSize(200, 200));
         wxBoxSizer* preview_sizer = new wxBoxSizer(wxVERTICAL);
         preview_panel->SetSizer(preview_sizer);
@@ -28,9 +46,9 @@ public:
         preview_panel->SetBackgroundColour("black");
 
 
-        wxPanel* playback_tools_panel = new wxPanel(window, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+        wxPanel* playback_tools_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
         wxBoxSizer* playback_tools_sizer = new wxBoxSizer(wxHORIZONTAL);
-        wxButton* play_button = new wxButton(playback_tools_panel, wxID_ANY, "play", wxDefaultPosition, wxDefaultSize);
+        wxButton* play_button = new wxButton(playback_tools_panel, wxID_OPEN, "play", wxDefaultPosition, wxDefaultSize);
         wxButton* stop_button = new wxButton(playback_tools_panel, wxID_ANY, "stop", wxDefaultPosition, wxDefaultSize);
 
         playback_tools_panel->SetSizer(playback_tools_sizer);
@@ -38,25 +56,36 @@ public:
         playback_tools_sizer->Add(stop_button, 0);
 
         app_sizer->Add(preview_panel, 1, wxEXPAND | wxALL, 5);
-        app_sizer->Add(playback_tools_panel, 0, wxALIGN_BOTTOM | wxALL, 5);
-        
-        window->SetMenuBar(menu_bar);
-        window->SetSizer(app_sizer);
-        window->Show();
-        return true;
+        app_sizer->Add(playback_tools_panel, 0, wxEXPAND | wxALL, 5);
+
+        this->SetMenuBar(menu_bar);
+        this->SetSizer(app_sizer);
     }
+    
+    
 
+private:
 
+    void OnOpen(wxCommandEvent& event);
 
-
-
-    void printHelloWorld() {
-        std::cout << "Hello World!";
-    }
-
-    //wxStaticText* text = new wxStaticText(window, wxID_ANY, "Test Message",
-        //    wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL);
-        //text->SetFont(wxFont(20, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+    wxDECLARE_EVENT_TABLE();
 };
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
+EVT_BUTTON(wxID_OPEN, MyFrame::OnOpen)
+wxEND_EVENT_TABLE();
+
+bool App::OnInit() {
+    MyFrame *frame = new MyFrame("MLC media player", wxDefaultPosition, wxSize(1280, 720));
+    frame->Show(true);
+    return true;
+}
+
+void MyFrame::OnOpen(wxCommandEvent& event) {
+    AllocConsole();
+    freopen("conin$", "r", stdin);
+    freopen("conout$", "w", stdout);
+    freopen("conout$", "w", stdout);
+    std::cout << "pressed!";
+}
 
 wxIMPLEMENT_APP(App);
