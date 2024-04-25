@@ -1,36 +1,22 @@
 #include <wx/wx.h>
 #include <iostream>
 
-
-class App : public wxApp {
-public:
-    virtual bool OnInit();
-
-
-    static void printHelloWorld() {
-        std::cout << "Hello World!";
-    }
-
-
-};
+namespace MenuIds {
+    const int open = 100;
+}
 
 class MyFrame : public wxFrame {
 public:
 
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size) : wxFrame(nullptr, wxID_ANY, title, pos, size){
-        //AllocConsole();
-        ////freopen("conin$", "r", stdin);
-        //freopen("conout$", "w", stdout);
-        //freopen("conout$", "w", stdout);
-        //printHelloWorld();
+    // MAINFRAME ELEMENT INITIALIZATION
+    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size) : wxFrame(nullptr, wxID_ANY, title, pos, size) {
         wxBoxSizer* app_sizer = new wxBoxSizer(wxVERTICAL);
 
         // MENU BAR
         wxMenuBar* menu_bar = new wxMenuBar(wxHORIZONTAL);
-
         /// FILE
         wxMenu* file_menu = new wxMenu();
-        file_menu->Append(wxID_ANY, "open");
+        file_menu->Append(MenuIds::open, "open");
         menu_bar->Append(file_menu, "file");
 
         /// EDIT
@@ -48,7 +34,7 @@ public:
 
         wxPanel* playback_tools_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
         wxBoxSizer* playback_tools_sizer = new wxBoxSizer(wxHORIZONTAL);
-        wxButton* play_button = new wxButton(playback_tools_panel, wxID_OPEN, "play", wxDefaultPosition, wxDefaultSize);
+        wxButton* play_button = new wxButton(playback_tools_panel, wxID_ANY, "play", wxDefaultPosition, wxDefaultSize);
         wxButton* stop_button = new wxButton(playback_tools_panel, wxID_ANY, "stop", wxDefaultPosition, wxDefaultSize);
 
         playback_tools_panel->SetSizer(playback_tools_sizer);
@@ -61,31 +47,37 @@ public:
         this->SetMenuBar(menu_bar);
         this->SetSizer(app_sizer);
     }
-    
-    
 
 private:
 
-    void OnOpen(wxCommandEvent& event);
+    void OnOpen(wxCommandEvent& event) {
+        AllocConsole();
+        freopen("conin$", "r", stdin);
+        freopen("conout$", "w", stdout);
+        freopen("conout$", "w", stdout);
+        std::cout << "pressed!";
+
+        wxString file_path = wxFileSelector("please select a media item");
+        std::cout << file_path;
+    }
 
     wxDECLARE_EVENT_TABLE();
 };
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-EVT_BUTTON(wxID_OPEN, MyFrame::OnOpen)
+EVT_MENU(MenuIds::open, MyFrame::OnOpen)
 wxEND_EVENT_TABLE();
 
-bool App::OnInit() {
-    MyFrame *frame = new MyFrame("MLC media player", wxDefaultPosition, wxSize(1280, 720));
-    frame->Show(true);
-    return true;
-}
+// EXE APP
+class App : public wxApp {
+public:
+    bool OnInit() {
+        MyFrame* frame = new MyFrame("MLC media player", wxDefaultPosition, wxSize(1280, 720));
+        frame->Show(true);
+        return true;
+    }
+};
 
-void MyFrame::OnOpen(wxCommandEvent& event) {
-    AllocConsole();
-    freopen("conin$", "r", stdin);
-    freopen("conout$", "w", stdout);
-    freopen("conout$", "w", stdout);
-    std::cout << "pressed!";
-}
+
+
 
 wxIMPLEMENT_APP(App);
