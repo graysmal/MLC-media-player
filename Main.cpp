@@ -1,12 +1,17 @@
 #include <wx/wx.h>
+#include <wx/mediactrl.h>
 #include <iostream>
 
 namespace MenuIds {
     const int open = 100;
+    const int media = 200;
 }
 
 class MyFrame : public wxFrame {
 public:
+
+    wxMediaCtrl* media_control;
+    wxString file_path = "C:\\Users\\gs1044940\\Downloads\\nyancat.mp4";
 
     // MAINFRAME ELEMENT INITIALIZATION
     MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size) : wxFrame(nullptr, wxID_ANY, title, pos, size) {
@@ -27,9 +32,12 @@ public:
         wxPanel* preview_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
         preview_panel->SetMinSize(wxSize(200, 200));
         wxBoxSizer* preview_sizer = new wxBoxSizer(wxVERTICAL);
+        media_control = new wxMediaCtrl(preview_panel, MenuIds::media, file_path);
+        
         preview_panel->SetSizer(preview_sizer);
-        preview_sizer->AddStretchSpacer();
-        preview_panel->SetBackgroundColour("black");
+        preview_sizer->Add(media_control, 0);
+        //preview_sizer->AddStretchSpacer();
+        //preview_panel->SetBackgroundColour("black");
 
 
         wxPanel* playback_tools_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
@@ -55,16 +63,22 @@ private:
         freopen("conin$", "r", stdin);
         freopen("conout$", "w", stdout);
         freopen("conout$", "w", stdout);
+        media_control->Play();
         std::cout << "pressed!";
-
-        wxString file_path = wxFileSelector("please select a media item");
+        file_path = wxFileSelector("please select a media item");
         std::cout << file_path;
+        media_control->Load(file_path);
+    }
+
+    void PlayMedia(wxMediaEvent& event) {
+        media_control->Play();
     }
 
     wxDECLARE_EVENT_TABLE();
 };
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 EVT_MENU(MenuIds::open, MyFrame::OnOpen)
+EVT_MEDIA_LOADED(MenuIds::media, MyFrame::PlayMedia)
 wxEND_EVENT_TABLE();
 
 // EXE APP
