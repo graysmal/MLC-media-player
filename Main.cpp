@@ -4,6 +4,7 @@
 
 namespace MenuIds {
     const int open = 100;
+    const int play = 102;
     const int media = 200;
 }
 
@@ -32,17 +33,16 @@ public:
         wxPanel* preview_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
         preview_panel->SetMinSize(wxSize(200, 200));
         wxBoxSizer* preview_sizer = new wxBoxSizer(wxVERTICAL);
-        media_control = new wxMediaCtrl(preview_panel, MenuIds::media, file_path);
-        
+        media_control = new wxMediaCtrl(preview_panel, MenuIds::media, file_path, wxDefaultPosition, wxSize(200, 200));
         preview_panel->SetSizer(preview_sizer);
-        preview_sizer->Add(media_control, 0);
+        preview_sizer->Add(media_control, 1, wxEXPAND | wxALL);
         //preview_sizer->AddStretchSpacer();
         //preview_panel->SetBackgroundColour("black");
 
 
         wxPanel* playback_tools_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
         wxBoxSizer* playback_tools_sizer = new wxBoxSizer(wxHORIZONTAL);
-        wxButton* play_button = new wxButton(playback_tools_panel, wxID_ANY, "play", wxDefaultPosition, wxDefaultSize);
+        wxButton* play_button = new wxButton(playback_tools_panel, MenuIds::play, "play", wxDefaultPosition, wxDefaultSize);
         wxButton* stop_button = new wxButton(playback_tools_panel, wxID_ANY, "stop", wxDefaultPosition, wxDefaultSize);
 
         playback_tools_panel->SetSizer(playback_tools_sizer);
@@ -63,22 +63,23 @@ private:
         freopen("conin$", "r", stdin);
         freopen("conout$", "w", stdout);
         freopen("conout$", "w", stdout);
-        media_control->Play();
+        //media_control->Play();
         std::cout << "pressed!";
         file_path = wxFileSelector("please select a media item");
         std::cout << file_path;
         media_control->Load(file_path);
     }
 
-    void PlayMedia(wxMediaEvent& event) {
+    void PlayMedia(wxCommandEvent& event) {
         media_control->Play();
     }
 
     wxDECLARE_EVENT_TABLE();
 };
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
+EVT_BUTTON(MenuIds::play, MyFrame::PlayMedia)
 EVT_MENU(MenuIds::open, MyFrame::OnOpen)
-EVT_MEDIA_LOADED(MenuIds::media, MyFrame::PlayMedia)
+//EVT_MEDIA_LOADED(MenuIds::media, MyFrame::PlayMedia)
 wxEND_EVENT_TABLE();
 
 // EXE APP
